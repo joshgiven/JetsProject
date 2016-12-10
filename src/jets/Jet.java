@@ -25,10 +25,10 @@ public class Jet {
 	
 	public void display() {
 		System.out.println("model: " + model);
-		System.out.println("speed: MACH " + getMACH());
-		System.out.println("range: " + range);
-		System.out.println("price: " + price);
-		System.out.println("pilot: \n" + price);
+		System.out.printf( "speed: MACH %.3f\n", getMACH());
+		System.out.printf( "range: %.0f\n", range);
+		System.out.printf( "price: $%.2f\n", price);
+		System.out.println("pilot: " + pilot);
 		//pilot.display();
 	}
 	
