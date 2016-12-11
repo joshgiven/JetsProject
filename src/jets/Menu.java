@@ -36,11 +36,16 @@ public class Menu {
 
 	}
 	
-	Scanner kb = new Scanner(System.in);
+	Scanner kb;
 	String delimiter = "\n";
 	String verticalSeperator = "";
 	//String verticalSeparator = "~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~";
 
+	public Menu(Scanner userInput) {
+		this.kb = userInput;
+	}
+	
+	
 	public void displayMenu(Choosable[] choices){ //list menu options
 		for (Choosable m : choices){
 			System.out.print(m.label() + delimiter);
@@ -68,11 +73,19 @@ public class Menu {
 		return m;
 	}
 	
+	
+	// TODO: split these user input methods off to different class
+	//   They don't belong here.
 	public String getUserString(String prompt){
-		System.out.print(prompt);
 		Pattern p = kb.delimiter();
 		kb.useDelimiter("\n");
-		String name = kb.next();
+		
+		String name = null;
+		while(name == null || name.equals("")) {
+			System.out.print(prompt);
+			name = kb.next();
+		}
+		
 		kb.useDelimiter(p);
 		return name;
 	}
@@ -99,6 +112,23 @@ public class Menu {
 				kb.next(); // eat bad data
 			}
 		} while(true);
+	}
+
+
+	public String getDelimiter() {
+		return delimiter;
+	}
+
+	public void setDelimiter(String delimiter) {
+		this.delimiter = delimiter;
+	}
+
+	public String getVerticalSeperator() {
+		return verticalSeperator;
+	}
+
+	public void setVerticalSeperator(String verticalSeperator) {
+		this.verticalSeperator = verticalSeperator;
 	}
 	
 //	public static void main(String[] args) {

@@ -24,11 +24,18 @@ public class Jet {
 	}
 	
 	public void display() {
-		System.out.println("model: " + model);
-		System.out.printf( "speed: MACH %.3f\n", getMACH());
-		System.out.printf( "range: %.0f\n", range);
-		System.out.printf( "price: $%.2f\n", price);
-		System.out.println("pilot: " + pilot);
+		String pattern = "$###,###,###,###.###";
+		java.text.DecimalFormat formatter = new java.text.DecimalFormat(pattern);
+	    String fmtPrice = formatter.format(price);
+		
+		System.out.println("**************************************");
+		System.out.println("* model: " + model);
+		System.out.printf( "* speed: Mach %.3f\n", getMACH());
+		System.out.printf( "* range: %.0f\n", range);
+		//System.out.printf( "* price: $%.2f\n", fmtPrice);
+		System.out.println( "* price: " + fmtPrice);
+		System.out.println("* pilot: " + pilot);
+		System.out.println("**************************************");
 		//pilot.display();
 	}
 	
