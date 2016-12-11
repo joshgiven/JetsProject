@@ -2,27 +2,18 @@ package jets;
 
 public class Pilot {
 	private String name;
-	private String nickname;
 	private String gender;
 	private int age;
-	private String quote;
 	
-	public Pilot(String name, String nickname, String gender, int age, String quote) {
+	public Pilot(String name, String gender, int age) {
 		super();
 		this.name = name;
-		this.nickname = nickname;
-		this.gender = gender;
-		this.age = age;
-		this.quote = quote;
+		setGender(gender);
+		setAge(age);
 	}
 
 	public String toString() {
-		return "Pilot [name=" + name + ", nickname=" + nickname + ", gender=" + gender + ", age=" + age + ", quote="
-				+ quote + "]";
-	}
-
-	public void display() {
-		System.out.println(this.toString());
+		return String.format("%s (Sex:%s, Age:%d)", name, gender, age);
 	}
 
 	public String getName() {
@@ -33,20 +24,16 @@ public class Pilot {
 		this.name = name;
 	}
 
-	public String getNickname() {
-		return nickname;
-	}
-
-	public void setNickname(String nickname) {
-		this.nickname = nickname;
-	}
-
 	public String getGender() {
 		return gender;
 	}
 
 	public void setGender(String gender) {
-		this.gender = gender;
+		gender = gender.toUpperCase();
+		if(gender.equals("F"))
+			this.gender = "F";
+		else
+			this.gender = "M";
 	}
 
 	public int getAge() {
@@ -54,14 +41,42 @@ public class Pilot {
 	}
 
 	public void setAge(int age) {
-		this.age = age;
+		if(age >= 0)
+			this.age = age;
 	}
 
-	public String getQuote() {
-		return quote;
+	@Override
+	public int hashCode() {
+		final int prime = 31;
+		int result = 1;
+		result = prime * result + age;
+		result = prime * result + ((gender == null) ? 0 : gender.hashCode());
+		result = prime * result + ((name == null) ? 0 : name.hashCode());
+		return result;
 	}
 
-	public void setQuote(String quote) {
-		this.quote = quote;
+	@Override
+	public boolean equals(Object obj) {
+		if (this == obj)
+			return true;
+		if (obj == null)
+			return false;
+		if (getClass() != obj.getClass())
+			return false;
+		Pilot other = (Pilot) obj;
+		if (age != other.age)
+			return false;
+		if (gender == null) {
+			if (other.gender != null)
+				return false;
+		} else if (!gender.equals(other.gender))
+			return false;
+		if (name == null) {
+			if (other.name != null)
+				return false;
+		} else if (!name.equals(other.name))
+			return false;
+		return true;
 	}
+	
 }

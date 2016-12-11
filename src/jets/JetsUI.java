@@ -4,6 +4,7 @@ import java.util.Scanner;
 
 public class JetsUI {
 	private Hangar fleet;
+	private Barracks crew;
 	private Menu menu;
 	private Scanner kb;
 	
@@ -11,6 +12,7 @@ public class JetsUI {
 		kb = new Scanner(System.in);
 		menu = new Menu(kb);
 		fleet = new Hangar();
+		crew = new Barracks();
 	}
 	
 	private void initializeFleet() {
@@ -23,9 +25,12 @@ public class JetsUI {
 		};
 
 		for(Jet jet : jets) {
+			Pilot pilot = crew.nextUnassignedPilot();
+			crew.assignPilot(pilot, jet);
+			
 			fleet.addJet(jet);
 		}
-	}
+	}	
 	
 	public static void main(String[] args) {
 		JetsUI ui = new JetsUI();
@@ -134,22 +139,24 @@ public class JetsUI {
 	}
 
 	private void addJetToFleet() {
-		System.out.println("adding a jet...");
+		System.out.println("\nAdding a jet...");
 		
 		String model = menu.getUserString("Enter Model: ");
 		double speed = menu.getUserDouble("Enter speed (mph): ");
 		double range = menu.getUserDouble("Enter range (miles): ");
 		double price = menu.getUserDouble("Enter price ($): ");
 		
-		Jet j = new Jet(model, speed, range, price);
+		Jet jet = new Jet(model, speed, range, price);
 		
-		j.display();
+		Pilot pilot = crew.nextUnassignedPilot();
+		crew.assignPilot(pilot, jet);
+		jet.display();
 		
 		String choice = null;
 		do {
 			choice = menu.getUserString("Add new jet to fleet (y/n)? ");
 			if(choice.equalsIgnoreCase("Y")) {
-				fleet.addJet(j);
+				fleet.addJet(jet);
 				System.out.println("New jet added.");
 				break;
 			}

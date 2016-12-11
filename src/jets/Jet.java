@@ -14,9 +14,9 @@ public class Jet {
 	public Jet(String model, double speed, double range, double price) {
 		super();
 		this.model = model;
-		this.speed = speed;
-		this.range = range;
-		this.price = price;
+		setSpeed(speed);
+		setRange(range);
+		setPrice(price);
 	}
 
 	public double getMACH() {
@@ -27,16 +27,14 @@ public class Jet {
 		String pattern = "$###,###,###,###.###";
 		java.text.DecimalFormat formatter = new java.text.DecimalFormat(pattern);
 	    String fmtPrice = formatter.format(price);
-		
-		System.out.println("**************************************");
+		//                  =================================================
+		System.out.println("*************************************************");
 		System.out.println("* model: " + model);
 		System.out.printf( "* speed: Mach %.3f\n", getMACH());
-		System.out.printf( "* range: %.0f\n", range);
-		//System.out.printf( "* price: $%.2f\n", fmtPrice);
-		System.out.println( "* price: " + fmtPrice);
+		System.out.printf( "* range: %.0f nmi\n", range);
+		System.out.println("* price: " + fmtPrice);
 		System.out.println("* pilot: " + pilot);
-		System.out.println("**************************************");
-		//pilot.display();
+		System.out.println("*************************************************");
 	}
 	
 	public String getModel() {
@@ -52,7 +50,8 @@ public class Jet {
 	}
 
 	public void setSpeed(double speed) {
-		this.speed = speed;
+		if(speed >= 0)
+			this.speed = speed;
 	}
 
 	public double getRange() {
@@ -60,7 +59,8 @@ public class Jet {
 	}
 
 	public void setRange(double range) {
-		this.range = range;
+		if(range >= 0)
+			this.range = range;
 	}
 
 	public double getPrice() {
@@ -68,7 +68,8 @@ public class Jet {
 	}
 
 	public void setPrice(double price) {
-		this.price = price;
+		if(range >= 0)
+			this.price = price;
 	}
 
 	public Pilot getPilot() {
@@ -78,5 +79,4 @@ public class Jet {
 	public void setPilot(Pilot pilot) {
 		this.pilot = pilot;
 	}
-	
 }
