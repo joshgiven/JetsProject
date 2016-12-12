@@ -42,11 +42,13 @@ public class JetsUI {
 	}
 
 	enum JetsMenuChoice implements Menu.Choosable {
-		LIST ("(1) List Fleet",                 "1"),
-		FAST ("(2) View Fastest Jet",           "2"),
-		RANGE("(3) View Jet w/ Longest Range",  "3"),
-		ADD  ("(4) Add a Jet to Fleet",         "4"),
-		QUIT ("(5) Quit",                       "5")
+		LIST  ("(1) List Fleet",                 "1"),
+		FAST  ("(2) View Fastest Jet",           "2"),
+		RANGE ("(3) View Jet w/ Longest Range",  "3"),
+		ADD   ("(4) Add a Jet to Fleet",         "4"),
+		PILOTS("(5) List Pilots",                "5"),
+		HIRE  ("(6) Hire a Pilot",               "6"),
+		QUIT  ("(7) Quit",                       "7")
 		;
 		
 		private String label;
@@ -80,6 +82,12 @@ public class JetsUI {
 			case ADD:
 				addJetToFleet();
 				break;
+			case PILOTS:
+				displayPilots();
+				break;
+			case HIRE:
+				hirePilot();
+				break;
 			case QUIT:
 			default:
 				System.out.println("\nGoodbye.");
@@ -102,7 +110,7 @@ public class JetsUI {
 
 		System.out.println();
 		if(allJets == null || allJets.length == 0) {
-			System.out.println("No jets in fleet");
+			System.out.println("(No jets in fleet)");
 			return;
 		}
 		
@@ -123,7 +131,7 @@ public class JetsUI {
 
 		System.out.println();
 		if(allJets == null || allJets.length == 0) {
-			System.out.println("No jets in fleet");
+			System.out.println("(No jets in fleet)");
 			return;
 		}
 		
@@ -140,7 +148,7 @@ public class JetsUI {
 	}
 
 	private void addJetToFleet() {
-		System.out.println("\nAdding a jet...");
+		System.out.println("\nAdding a jet... ");
 		
 		String model = menu.getUserString("Enter Model: ");
 		double speed = menu.getUserDouble("Enter speed (mph): ");
@@ -166,8 +174,76 @@ public class JetsUI {
 				break;
 			}
 		} while(true);
+		System.out.println();
 	}
 	
+	private void displayPilots() {
+		System.out.println("\nPilot Roster: ");
+		Pilot[] roster = crew.getAllPilots();
+		if(roster == null || roster.length == 0) {
+			System.out.println("(No pilots on roster)\n");
+			return;
+		}
+		
+		roster = crew.getAssignedPilots();
+		if(roster != null && roster.length > 0) {
+			System.out.println("  - w/ assigned jets:");
+			for(Pilot p : roster) {
+				System.out.println("     * " + p);
+			}
+			System.out.println();
+		}
+		
+		roster = crew.getUnassignedPilots();
+		if(roster != null && roster.length > 0) {
+			System.out.println("  - w/o assigned jets:");
+			for(Pilot p : roster) {
+				System.out.println("     * " + p);
+			}
+			System.out.println();
+		}
+	}
+	
+	private void hirePilot() {
+		System.out.println("\nHiring a pilot... ");
+
+		String fname  = menu.getUserString("Enter first name: ");
+		String lname  = menu.getUserString("Enter last name:  ");
+		String nname  = menu.getUserString("Enter nickname:   ");
+		String name = String.format("%s \"%s\" %s", fname, nname, lname);
+		
+		String gender = null;
+		do {
+			gender = menu.getUserString("Enter gender (M/F): ");
+			gender = gender.toUpperCase();
+			if(gender.equals("M") || gender.equals("F")) {
+				break;
+			}
+		} while(true);
+		
+		int age = menu.getUserInt("Enter age: ");
+		
+		Pilot pilot = new Pilot(name, gender, age);
+		System.out.println("\n  * " + pilot + "\n");
+		
+		String choice = null;
+		do {
+			choice = menu.getUserString("Add new pilot to roster (y/n)? ");
+			if(choice.equalsIgnoreCase("Y")) {
+				crew.hirePilot(pilot);
+				System.out.println("New pilot added.");
+				break;
+			}
+			else if(choice.equalsIgnoreCase("N")) {
+				System.out.println("New pilot discarded.");
+				break;
+			}
+		} while(true);
+		System.out.println();
+	}
+
+
+
 	private void displaySplash() {
 		String s = "";
 		s += "=================================================\n";

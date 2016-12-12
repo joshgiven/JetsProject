@@ -3,13 +3,12 @@
 
 ### Overview
 
-**JE.T.S.** has a menu with 5 options:
+**JE.T.S.** has a menu with 7 options:
 
 1. List fleet:
 
-   This option prints out the model, speed, range, and price of each jet. 
+   This option prints out the model, speed, range, price, and pilot of each jet. 
    * You get your first 5 jets, with a randomly chosen pilots, for free when the program starts
-   * *Update:* Pilot info is now also included!
 
 2. View fastest jet:
 
@@ -24,12 +23,18 @@
    A user can add custom jets to the fleet. You will be prompted for the jet's make, model, range, and price. 
    We'll hire a pilot to fly your jet at no extra price!
 
-5. Quit:
+5. List Pilots:
+
+   Displays the roster of pilots, broken down by assigmnet status.
+
+6. Hire a Pilot:
+
+   Prompts user for new pilot info (name, gender, and age).
+
+7. Quit:
 
    Quit exits the program. (duh.)
 
-Stuff that might get added:
-* Users can hire pilots
 
 ### To Run
 
