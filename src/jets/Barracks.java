@@ -13,9 +13,9 @@ public class Barracks {
 	//  (where p1 and p2 are assigned)
 	//
 	
-	Pilot[] pilots;
-	int numPilots;
-	int numAssigned;
+	private Pilot[] pilots;
+	private int numPilots;
+	private int numAssigned;
 	
 	public Barracks() {
 		// chose 3 so that we exercise expandArray()
@@ -220,9 +220,9 @@ final class RandomPilotGenerator {
 		int    age    = 22 + (int)(Math.random()*(49 - 22));
 		String gender = (Math.random() > 0.4) ? "M" : "F";
 		
-		String fname = (gender.equals("M")) ? randomName(firstNamesM) : randomName(firstNamesF);
-		String nickname = randomName(nickNames);
-		String lname    = randomName(lastNames);
+		String fname = (gender.equals("M")) ? randomName(FIRST_NAME_M) : randomName(FIRST_NAME_F);
+		String nickname = randomName(NICKNAMES);
+		String lname    = randomName(LAST_NAMES);
 		String name     = String.format("%s \"%s\" %s", fname, nickname, lname);
 
 		return new Pilot(name, gender, age);
@@ -232,7 +232,7 @@ final class RandomPilotGenerator {
 		return anArray[(int)(Math.random() * anArray.length)];
 	}
 	
-	private static final String[] firstNamesM = {
+	private static final String[] FIRST_NAME_M = {
 			"Aaron",
 			"Bob",
 			"Chuck",
@@ -262,7 +262,7 @@ final class RandomPilotGenerator {
 	};
 	
 	
-	private static final String[] firstNamesF = {
+	private static final String[] FIRST_NAME_F = {
 			"Ariel",
 			"Belle",
 			"Candy",
@@ -290,7 +290,7 @@ final class RandomPilotGenerator {
 			"Zanzibara"
 	};
 	
-	private static final String[] lastNames = {
+	private static final String[] LAST_NAMES = {
 			"Abercrombie",
 			"Allman",
 			"Alomar",
@@ -358,7 +358,7 @@ final class RandomPilotGenerator {
 			"Zappa",
 	};
 	
-	private static final String[] nickNames = {
+	private static final String[] NICKNAMES = {
 			"Apollo",
 			"Boom-Boom",
 			"Charlie",

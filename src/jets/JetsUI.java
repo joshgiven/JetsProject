@@ -5,12 +5,12 @@ import java.util.Scanner;
 public class JetsUI {
 	private Hangar fleet;
 	private Barracks crew;
-	private Menu menu;
+	private InputPrompter prompter;
 	private Scanner kb;
 	
 	public JetsUI() {
 		kb = new Scanner(System.in);
-		menu = new Menu(kb);
+		prompter = new InputPrompter(kb);
 		fleet = new Hangar();
 		crew = new Barracks();
 	}
@@ -41,7 +41,7 @@ public class JetsUI {
 		ui.execute();
 	}
 
-	enum JetsMenuChoice implements Menu.Choosable {
+	enum JetsMenuChoice implements InputPrompter.Choosable {
 		LIST  ("(1) List Fleet",                 "1"),
 		FAST  ("(2) View Fastest Jet",           "2"),
 		RANGE ("(3) View Jet w/ Longest Range",  "3"),
@@ -67,9 +67,9 @@ public class JetsUI {
 		boolean keepRunning = true;
 		JetsMenuChoice[] choices =  JetsMenuChoice.values();
 		
-		menu.setVerticalSeperator("--------------------------------------\n");
+		prompter.setVerticalSeperator("--------------------------------------\n");
 		do {
-			switch((JetsMenuChoice)menu.getUserChoice(choices, "> ")) {
+			switch((JetsMenuChoice)prompter.getUserMenuChoice(choices, "> ")) {
 			case LIST:
 				displayFleet();
 				break;
@@ -150,10 +150,10 @@ public class JetsUI {
 	private void addJetToFleet() {
 		System.out.println("\nAdding a jet... ");
 		
-		String model = menu.getUserString("Enter Model: ");
-		double speed = menu.getUserDouble("Enter speed (mph): ");
-		double range = menu.getUserDouble("Enter range (miles): ");
-		double price = menu.getUserDouble("Enter price ($): ");
+		String model = prompter.getUserString("Enter Model: ");
+		double speed = prompter.getUserDouble("Enter speed (mph): ");
+		double range = prompter.getUserDouble("Enter range (miles): ");
+		double price = prompter.getUserDouble("Enter price ($): ");
 		
 		Jet jet = new Jet(model, speed, range, price);
 		
@@ -163,7 +163,7 @@ public class JetsUI {
 		
 		String choice = null;
 		do {
-			choice = menu.getUserString("Add new jet to fleet (y/n)? ");
+			choice = prompter.getUserString("Add new jet to fleet (y/n)? ");
 			if(choice.equalsIgnoreCase("Y")) {
 				fleet.addJet(jet);
 				System.out.println("New jet added.");
@@ -207,28 +207,28 @@ public class JetsUI {
 	private void hirePilot() {
 		System.out.println("\nHiring a pilot... ");
 
-		String fname  = menu.getUserString("Enter first name: ");
-		String lname  = menu.getUserString("Enter last name:  ");
-		String nname  = menu.getUserString("Enter nickname:   ");
+		String fname  = prompter.getUserString("Enter first name: ");
+		String lname  = prompter.getUserString("Enter last name:  ");
+		String nname  = prompter.getUserString("Enter nickname:   ");
 		String name = String.format("%s \"%s\" %s", fname, nname, lname);
 		
 		String gender = null;
 		do {
-			gender = menu.getUserString("Enter gender (M/F): ");
+			gender = prompter.getUserString("Enter gender (M/F): ");
 			gender = gender.toUpperCase();
 			if(gender.equals("M") || gender.equals("F")) {
 				break;
 			}
 		} while(true);
 		
-		int age = menu.getUserInt("Enter age: ");
+		int age = prompter.getUserInt("Enter age: ");
 		
 		Pilot pilot = new Pilot(name, gender, age);
 		System.out.println("\n  * " + pilot + "\n");
 		
 		String choice = null;
 		do {
-			choice = menu.getUserString("Add new pilot to roster (y/n)? ");
+			choice = prompter.getUserString("Add new pilot to roster (y/n)? ");
 			if(choice.equalsIgnoreCase("Y")) {
 				crew.hirePilot(pilot);
 				System.out.println("New pilot added.");
@@ -241,8 +241,6 @@ public class JetsUI {
 		} while(true);
 		System.out.println();
 	}
-
-
 
 	private void displaySplash() {
 		String s = "";

@@ -4,12 +4,12 @@ import java.lang.reflect.Method;
 import java.util.Scanner;
 import java.util.regex.Pattern;
 
-public class Menu {
+public class InputPrompter {
 	public interface Choosable {
 		String label();
 		String keyOption();
 
-		default Choosable keyOptionChoice(String o) {
+		default Choosable keyOptionChoice(String key) {
 			Choosable mc = null;
 			if(this instanceof Enum) {
 				try {
@@ -18,13 +18,14 @@ public class Menu {
 					Enum[] values = (Enum[])m.invoke(null);
 					for(Enum e : values) {
 						Choosable item = (Choosable) e;
-						if(item.keyOption().equals(o))
-							mc = item;				
+						if(item.keyOption().equals(key)) {
+							mc = item;
+							break;
+						}
 					}
 				}
 				catch(Exception e) {
 					// Eat the exception, return null
-					//System.out.println("BOOM! " + e.getMessage());
 				}
 			}
 			
@@ -32,9 +33,27 @@ public class Menu {
 		}
 		
 		default Choosable labelChoice(String label) {
-			return null;
+			Choosable mc = null;
+			if(this instanceof Enum) {
+				try {
+					Class clazz = this.getClass();
+					Method m = clazz.getMethod("values");
+					Enum[] values = (Enum[])m.invoke(null);
+					for(Enum e : values) {
+						Choosable item = (Choosable) e;
+						if(item.label().equals(label)) {
+							mc = item;
+							break;
+						}
+					}
+				}
+				catch(Exception e) {
+					// Eat the exception, return null
+				}
+			}
+			
+			return mc;
 		}
-
 	}
 	
 	Scanner kb;
@@ -42,7 +61,7 @@ public class Menu {
 	String verticalSeperator = "";
 	String retryMessage = "invalid selection. try again.";
 	
-	public Menu(Scanner userInput) {
+	public InputPrompter(Scanner userInput) {
 		this.kb = userInput;
 	}
 	
@@ -52,7 +71,7 @@ public class Menu {
 		}
 	}
 	
-	public Choosable getUserChoice(Choosable[] choices, String prompt){
+	public Choosable getUserMenuChoice(Choosable[] choices, String prompt){
 		if(choices == null || choices.length == 0) {
 			return null;
 		}
@@ -79,9 +98,6 @@ public class Menu {
 		return m;
 	}
 	
-	
-	// TODO: split these user input methods off to different class
-	//   They don't really belong here.
 	public String getUserString(String prompt){
 		Pattern p = kb.delimiter();
 		kb.useDelimiter("\n");
@@ -120,7 +136,6 @@ public class Menu {
 		} while(true);
 	}
 
-
 	public String getSelectionDelimiter() {
 		return selectionDelimiter;
 	}
@@ -144,32 +159,5 @@ public class Menu {
 	public void setRetryMessage(String retryMessage) {
 		this.retryMessage = retryMessage;
 	}
-	
-//	public static void main(String[] args) {
-//		Menu menu = new Menu();
-//		
-//		System.out.println("Menu:");
-//		System.out.println(menu.getUserChoice(Choice.values(), "Pick one: "));
-//	}
-
-//public enum Choice implements Choosable {
-//	LIST ("(1) List Fleet",                 "1"),
-//	FAST ("(2) View Fastest Jet",           "2"),
-//	RANGE("(3) View Jet w/ Longest Range",  "3"),
-//	ADD  ("(4) Add a Jet to Fleet",         "4"),
-//	QUIT ("(5) Quit",                       "5")
-//	;
-//	
-//	private String label;
-//	private String keyOption;
-//
-//	private Choice(String label, String keyOption) {
-//		this.label = label;
-//		this.keyOption = keyOption;
-//	}
-//	
-//	public String label() { return label; }
-//	public String keyOption() { return keyOption; }
-//}
 }
 

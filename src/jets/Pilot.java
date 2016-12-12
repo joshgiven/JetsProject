@@ -5,6 +5,8 @@ public class Pilot {
 	private String gender;
 	private int age;
 	
+	public Pilot() {}
+	
 	public Pilot(String name, String gender, int age) {
 		super();
 		this.name = name;

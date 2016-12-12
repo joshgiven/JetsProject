@@ -64,9 +64,9 @@ Inspired by the [UML](https://github.com/SkillDistillery/SD8/blob/master/unit_1/
      * Contains the primary main() method
      * A JetsUI HAS-A Hangar
      * A JetsUI HAS-A Barracks
-     * A JetsUI HAS-A Menu
+     * A JetsUI HAS-A InputPrompter
      * Helper Enum Class that extends Choosable interface
-  * Menu
+  * InputPrompter
      * Generalized Menu/Input class
      * Helper Interface - Choosable
 
