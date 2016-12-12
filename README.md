@@ -8,7 +8,8 @@
 1. List fleet:
 
    This option prints out the model, speed, range, and price of each jet. 
-   *Update:* Pilot info is now also included!
+   * You get your first 5 jets, with a randomly chosen pilots, for free when the program starts
+   * *Update:* Pilot info is now also included!
 
 2. View fastest jet:
 
@@ -27,20 +28,18 @@
 
    Quit exits the program. (duh.)
 
-Stuff copied&pasted from the assignment:
-* There must be at least 5 jets stored when the program starts
-* Each jet has a pilot
-* Assign a random pilot to each jet that is created
+Stuff that might get added:
 * Users can hire pilots
-* Whenever a jet's information is displayed, that jet's pilot and his/her information should also be displayed
 
 ### To Run
 
 From the command line:
-`java JetsUI`
+   `java JetsUI`
 
 
 ### Structure
+
+Inspired by the [UML](https://github.com/SkillDistillery/SD8/blob/master/unit_1/week2/jets/UMLJets.png) in the assignment:
 
 * Core Classes:
   * Jet
