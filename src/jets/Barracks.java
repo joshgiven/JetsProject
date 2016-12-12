@@ -18,6 +18,7 @@ public class Barracks {
 	int numAssigned;
 	
 	public Barracks() {
+		// chose 3 so that we exercise expandArray()
 		pilots = new Pilot[3];
 		numPilots = 0;
 		numAssigned = 0;
@@ -32,8 +33,16 @@ public class Barracks {
 			addPilot(pilot);
 		}
 	}
-
 	
+	public Pilot nextUnassignedPilot() {
+		// if no pilots available, hire a new (random) one
+		if(numPilots == numAssigned) {
+			hirePilot(null);
+		}
+		
+		return pilots[numAssigned];
+	}
+
 	private void addPilot(Pilot pilot) {
 		if(containsPilot(pilot))
 			return;
@@ -49,12 +58,37 @@ public class Barracks {
 		return numPilots == pilots.length;
 	}
 
+	public void unassignPilot(Pilot pilot, Jet jet) {
+		if(jet == null || pilot ==null)
+			return;
+		
+		if(pilot != jet.getPilot()) {
+			return;
+		}
+		
+		int index = indexOf(pilot);
+		// not found   || not in assigned pool (?)
+		if(index == -1 || index >= numAssigned) {
+			// do nothing
+		}
+		// in assigned pool
+		else {
+			// add old pilot to back to unassigned pool
+			Pilot tmp = pilots[numAssigned-1];
+			pilots[numAssigned-1] = pilots[index];
+			pilots[index] = tmp;
+			numAssigned--;
+		}
+		
+		jet.setPilot(null);
+	}
+
 	public void assignPilot(Pilot pilot, Jet jet) {
 		if(pilot == null || jet == null)
 			return;
 
 		if(jet.getPilot() != null) {
-			// add old pilot to back to unassigned pool
+			unassignPilot(pilot, jet);
 		}
 
 		// find our pilot
@@ -67,12 +101,13 @@ public class Barracks {
 			addPilot(pilot);
 			index = indexOf(pilot);
 		}
-		
 		// if pilot already assigned
-		if(index < numAssigned)
+		else if(index < numAssigned) {
 			return;
+		}
 		
 		// juggle array
+		// stick our pilot in next available "assigned" spot
 		Pilot tmp = pilots[numAssigned];
 		pilots[numAssigned] = pilots[index];
 		pilots[index] = tmp;
@@ -80,15 +115,6 @@ public class Barracks {
 
 		// stick the pilot into the jet
 		jet.setPilot(pilot);
-	}
-	
-	public Pilot nextUnassignedPilot() {
-		// if no pilots available, hire a new (random) one
-		if(numPilots == numAssigned) {
-			hirePilot(null);
-		}
-		
-		return pilots[numAssigned];
 	}
 	
 	public Pilot[] getAllPilots() {
@@ -132,15 +158,67 @@ public class Barracks {
 	}
 	
 	public static void main(String[] args) {
-		for(int i=0; i < 20; i++)
-			System.out.println(RandomPilotGenerator.randomPilot());
+		Barracks barracks = new Barracks();
+		
+		for(int i=0; i < 20; i++) {
+			//System.out.println(RandomPilotGenerator.randomPilot());
+			barracks.hirePilot(RandomPilotGenerator.randomPilot());			
+		}
+		
+		System.out.println("\nAll pilots (pre):");
+		for(Pilot p : barracks.getAllPilots())
+			System.out.println(p);
+		
+		Jet[] jets = new Jet[5];
+		for(int i=0; i<jets.length; i++) {
+			Jet j = new Jet();
+			jets[i] = j;
+			
+			//Pilot p = barracks.nextUnassignedPilot();
+			
+			Pilot[] pool = barracks.getUnassignedPilots();
+			Pilot p = pool[(int)(Math.random()*pool.length)];
+			System.out.println("assigning: " + p);
+			barracks.assignPilot(p, j);
+		}
+		
+		System.out.println("-------------------------");
+		System.out.println("\nAll pilots (post-assign):");
+		for(Pilot p : barracks.getAllPilots())
+			System.out.println(p);
+		
+		System.out.println("\nAssigned pilots:");
+		for(Pilot p : barracks.getAssignedPilots())
+			System.out.println(p);
+		
+		System.out.println("\nUnassigned pilots:");
+		for(Pilot p : barracks.getUnassignedPilots())
+			System.out.println(p);
+
+		
+		Jet rj = jets[(int)(Math.random()*jets.length)];
+		System.out.println("\nunassigning: " + rj.getPilot() + "\n");
+		barracks.unassignPilot(rj.getPilot(), rj);
+		
+		System.out.println("-------------------------");
+		System.out.println("\nAll pilots (post-unassign):");
+		for(Pilot p : barracks.getAllPilots())
+			System.out.println(p);
+		
+		System.out.println("\nAssigned pilots:");
+		for(Pilot p : barracks.getAssignedPilots())
+			System.out.println(p);
+		
+		System.out.println("\nUnassigned pilots:");
+		for(Pilot p : barracks.getUnassignedPilots())
+			System.out.println(p);
 	}
 }
 
-abstract class RandomPilotGenerator {
+final class RandomPilotGenerator {
 	static public Pilot randomPilot() {
 		int    age    = 22 + (int)(Math.random()*(49 - 22));
-		String gender = (Math.random() > 0.5) ? "M" : "F";
+		String gender = (Math.random() > 0.4) ? "M" : "F";
 		
 		String fname = (gender.equals("M")) ? randomName(firstNamesM) : randomName(firstNamesF);
 		String nickname = randomName(nickNames);
@@ -213,27 +291,69 @@ abstract class RandomPilotGenerator {
 	};
 	
 	private static final String[] lastNames = {
+			"Abercrombie",
 			"Allman",
+			"Alomar",
 			"Beck",
+			"Belew",
+			"Burrell",
 			"Clapton",
+			"Coryell",
 			"Dale",
+			"DiMeola",
 			"Earl",
 			"Frehley",
+			"Fripp",
+			"Frisell",
+			"Garcia",
 			"Gilmour",
+			"Ginn",
+			"Green",
+			"Hackett",
+			"Harrison",
 			"Hendrix",
+			"Howe",
+			"Hunter",
 			"Iommi",
 			"Johnson",
+			"Jones",
 			"Knopfler",
 			"Lifeson",
 			"Malmsteen",
+			"Martino",
+			"McLaughlin",
+			"Manzanera",
+			"Marr",
+			"Metheny",
+			"Montgomery",
 			"Nugent",
 			"Osborne",
 			"Page",
+			"Paul",
+			"Ramone",
+			"Reed",
+			"Reid",
+			"Reinhardt",
+			"Ribot",
+			"Ronson",
+			"Rundgren",
 			"Richards",
+			"Sambora",
 			"Schenker",
+			"Scofield",
+			"Sharrock",
+			"Smith",
+			"Summers",
 			"Taylor",
+			"Thompson",
+			"Trower",
+			"Ulmer",
+			"Vai",
 			"Van Halen",
+			"Vaughan",
+			"Ween",
 			"Winter",
+			"Wood",
 			"Young",
 			"Zappa",
 	};
@@ -282,6 +402,7 @@ abstract class RandomPilotGenerator {
 			"Lucho Libre",
 			"Chupacabra",
 			"Flim-Flam",
+			"Wild Thing",
 			"Swamp-Thing",
 			"Ishmael",
 			"Sue",
@@ -290,6 +411,10 @@ abstract class RandomPilotGenerator {
 			"Puggsley",
 			"Fester",
 			"Wednesday",
+			"Cousin Itt",
+			"Lurch",
+			"Gomez",
+			"Morticia",
 			"Radar",
 			"Hotlips",
 			"Hawkeye",
@@ -314,6 +439,8 @@ abstract class RandomPilotGenerator {
 			"Cletus",
 			"Jethro",
 			"Krampus",
+			"Buckethead",
+			"Bootsy",
 			"Moe",
 			"Curly",
 			"Shemp",

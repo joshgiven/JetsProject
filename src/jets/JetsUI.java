@@ -24,6 +24,8 @@ public class JetsUI {
 			new Jet("Namath BroadwayJoe-12", 400, 2000, 199_999.95), 
 		};
 
+		// assign a pilot to each jet
+		// add each jet to our fleet
 		for(Jet jet : jets) {
 			Pilot pilot = crew.nextUnassignedPilot();
 			crew.assignPilot(pilot, jet);
@@ -39,7 +41,7 @@ public class JetsUI {
 		ui.execute();
 	}
 
-	enum JetsUIChoice implements Menu.Choosable {
+	enum JetsMenuChoice implements Menu.Choosable {
 		LIST ("(1) List Fleet",                 "1"),
 		FAST ("(2) View Fastest Jet",           "2"),
 		RANGE("(3) View Jet w/ Longest Range",  "3"),
@@ -50,7 +52,7 @@ public class JetsUI {
 		private String label;
 		private String keyOption;
 
-		private JetsUIChoice(String label, String keyOption) {
+		private JetsMenuChoice(String label, String keyOption) {
 			this.label = label;
 			this.keyOption = keyOption;
 		}
@@ -61,12 +63,11 @@ public class JetsUI {
 
 	public void execute() {
 		boolean keepRunning = true;
-		JetsUIChoice[] choices =  JetsUIChoice.values();
+		JetsMenuChoice[] choices =  JetsMenuChoice.values();
 		
 		menu.setVerticalSeperator("--------------------------------------\n");
-
 		do {
-			switch((JetsUIChoice)menu.getUserChoice(choices, "> ")) {
+			switch((JetsMenuChoice)menu.getUserChoice(choices, "> ")) {
 			case LIST:
 				displayFleet();
 				break;
@@ -170,12 +171,14 @@ public class JetsUI {
 	private void displaySplash() {
 		String s = "";
 		s += "=================================================\n";
+		s += "=                                               =\n";
 		s += "=               ##  ######  ######  ######      =\n";
 		s += "=              ##  ##        ##    ##           =\n";
 		s += "=             ##  ####      ##    ######        =\n";
 		s += "=        ##  ##  ##        ##        ##         =\n";
 		s += "=       ##  ##  ##        ##        ##          =\n";
 		s += "=      ######  ###### #  ## #  ###### #         =\n";
+		s += "=                                               =\n";
 		s += "=================================================\n";
 		s += "=              JEt Tracking System              =\n";
 		s += "=================================================\n";

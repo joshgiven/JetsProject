@@ -5,6 +5,7 @@ public class Hangar {
 	private int numJets;
 
 	public Hangar() {
+		// chose 3 so that we exercise expandArray()
 		jets = new Jet[3];
 		numJets = 0;
 	}

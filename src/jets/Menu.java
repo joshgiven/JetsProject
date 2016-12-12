@@ -23,7 +23,8 @@ public class Menu {
 					}
 				}
 				catch(Exception e) {
-					System.out.println("BOOM! " + e.getMessage());
+					// Eat the exception, return null
+					//System.out.println("BOOM! " + e.getMessage());
 				}
 			}
 			
@@ -37,18 +38,17 @@ public class Menu {
 	}
 	
 	Scanner kb;
-	String delimiter = "\n";
+	String selectionDelimiter = "\n";
 	String verticalSeperator = "";
-	//String verticalSeparator = "~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~";
-
+	String retryMessage = "invalid selection. try again.";
+	
 	public Menu(Scanner userInput) {
 		this.kb = userInput;
 	}
 	
-	
 	public void displayMenu(Choosable[] choices){ //list menu options
 		for (Choosable m : choices){
-			System.out.print(m.label() + delimiter);
+			System.out.print(m.label() + selectionDelimiter);
 		}
 	}
 	
@@ -59,6 +59,7 @@ public class Menu {
 		
 		System.out.print(verticalSeperator);
 		displayMenu(choices);
+		System.out.print(verticalSeperator);
 		
 		Choosable first = choices[0];
 		Choosable m = null;
@@ -67,15 +68,20 @@ public class Menu {
 			System.out.print(prompt);
 			choice = kb.next();
 			m = first.keyOptionChoice(choice.toUpperCase());
-		} while(m == null);
+			if(m == null) {
+				System.out.println(retryMessage);
+			}
+			else {
+				break;
+			}
+		} while(true);
 
-		System.out.print(verticalSeperator);
 		return m;
 	}
 	
 	
 	// TODO: split these user input methods off to different class
-	//   They don't belong here.
+	//   They don't really belong here.
 	public String getUserString(String prompt){
 		Pattern p = kb.delimiter();
 		kb.useDelimiter("\n");
@@ -115,12 +121,12 @@ public class Menu {
 	}
 
 
-	public String getDelimiter() {
-		return delimiter;
+	public String getSelectionDelimiter() {
+		return selectionDelimiter;
 	}
 
-	public void setDelimiter(String delimiter) {
-		this.delimiter = delimiter;
+	public void setSelectionDelimiter(String delimiter) {
+		this.selectionDelimiter = delimiter;
 	}
 
 	public String getVerticalSeperator() {
@@ -129,6 +135,14 @@ public class Menu {
 
 	public void setVerticalSeperator(String verticalSeperator) {
 		this.verticalSeperator = verticalSeperator;
+	}
+
+	public String getRetryMessage() {
+		return retryMessage;
+	}
+
+	public void setRetryMessage(String retryMessage) {
+		this.retryMessage = retryMessage;
 	}
 	
 //	public static void main(String[] args) {
