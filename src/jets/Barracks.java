@@ -4,7 +4,7 @@ public class Barracks {
 	//
 	// array holds assigned, then unassigned, then buffer
 	//
-    //                   numPilots
+	//                   numPilots
 	//     numAssigned     (5)
 	//         (2)          |
 	//          |           |
