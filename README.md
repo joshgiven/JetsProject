@@ -1,4 +1,4 @@
-## JetsProject
+## JetsProject v2.0
 *J-E-T-S!* This project is a **JE**t **T**racking **S**ystem called **JE.T.S.**. It actually keeps track of all of your jet-powered aereoplanes. Neat, huh?
 
 ### Overview
