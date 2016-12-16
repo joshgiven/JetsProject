@@ -1,27 +1,14 @@
 package jets;
 
+import java.util.*;
+
 public class Barracks {
-	//
-	// array holds assigned, then unassigned, then buffer
-	//
-	//                   numPilots
-	//     numAssigned     (5)
-	//         (2)          |
-	//          |           |
-	//  p1  p2  p3  p4  p5  null null null ...
-	//
-	//  (where p1 and p2 are assigned)
-	//
-	
-	private Pilot[] pilots;
-	private int numPilots;
-	private int numAssigned;
+	private List<Pilot> assignedPilots;
+	private List<Pilot> unassignedPilots;
 	
 	public Barracks() {
-		// chose 3 so that we exercise expandArray()
-		pilots = new Pilot[3];
-		numPilots = 0;
-		numAssigned = 0;
+		assignedPilots   = new ArrayList<>();
+		unassignedPilots = new ArrayList<>();
 	}
 	
 	public void hirePilot(Pilot pilot) {
@@ -36,28 +23,20 @@ public class Barracks {
 	
 	public Pilot nextUnassignedPilot() {
 		// if no pilots available, hire a new (random) one
-		if(numPilots == numAssigned) {
+		if(unassignedPilots.size() == 0) {
 			hirePilot(null);
 		}
 		
-		return pilots[numAssigned];
+		return unassignedPilots.get(0);
 	}
 
 	private void addPilot(Pilot pilot) {
 		if(containsPilot(pilot))
 			return;
 		
-		if(pilotArrayFull())
-			expandArray();
-		
-		pilots[numPilots] = pilot;
-		numPilots++;
+		unassignedPilots.add(pilot);
 	}
 	
-	private boolean pilotArrayFull() {
-		return numPilots == pilots.length;
-	}
-
 	public void unassignPilot(Pilot pilot, Jet jet) {
 		if(jet == null || pilot ==null)
 			return;
@@ -66,18 +45,11 @@ public class Barracks {
 			return;
 		}
 		
-		int index = indexOf(pilot);
-		// not found   || not in assigned pool (?)
-		if(index == -1 || index >= numAssigned) {
-			// do nothing
-		}
-		// in assigned pool
-		else {
+		int index = assignedPilots.indexOf(pilot);
+		if(index != -1) {
 			// add old pilot to back to unassigned pool
-			Pilot tmp = pilots[numAssigned-1];
-			pilots[numAssigned-1] = pilots[index];
-			pilots[index] = tmp;
-			numAssigned--;
+			Pilot p = assignedPilots.remove(index);
+			unassignedPilots.add(p);
 		}
 		
 		jet.setPilot(null);
@@ -92,69 +64,40 @@ public class Barracks {
 		}
 
 		// find our pilot
-		int index = indexOf(pilot);
+		int index = unassignedPilots.indexOf(pilot);
 
 		// if pilot not found, let's go ahead and add him
 		// (could just return here)
 		if(index == -1) {
 			//return;
 			addPilot(pilot);
-			index = indexOf(pilot);
-		}
-		// if pilot already assigned
-		else if(index < numAssigned) {
-			return;
+			index = unassignedPilots.indexOf(pilot);
 		}
 		
-		// juggle array
-		// stick our pilot in next available "assigned" spot
-		Pilot tmp = pilots[numAssigned];
-		pilots[numAssigned] = pilots[index];
-		pilots[index] = tmp;
-		numAssigned++;
-
+		Pilot p = unassignedPilots.remove(index);
+		assignedPilots.add(p);
+		
 		// stick the pilot into the jet
 		jet.setPilot(pilot);
 	}
 	
 	public Pilot[] getAllPilots() {
-		Pilot[] arr = new Pilot[numPilots];
-		System.arraycopy(pilots, 0, arr, 0, numPilots);
-		return arr;
+		List<Pilot> tmpList = new ArrayList<>(assignedPilots);
+		tmpList.addAll(unassignedPilots);
+		return tmpList.toArray(new Pilot[0]);
 	}
 	
 	public Pilot[] getAssignedPilots() {
-		Pilot[] arr = new Pilot[numAssigned];
-		System.arraycopy(pilots, 0, arr, 0, numAssigned);
-		return arr;
+		return assignedPilots.toArray(new Pilot[0]);
 	}
 
 	public Pilot[] getUnassignedPilots() {
-		int len = numPilots - numAssigned;
-		Pilot[] arr = new Pilot[len];
-		
-		System.arraycopy(pilots, numAssigned, arr, 0, len);
-		return arr;
+		return unassignedPilots.toArray(new Pilot[0]);
 	}
 
 	public boolean containsPilot(Pilot pilot) {
-		return !(indexOf(pilot) == -1);
-	}
-	
-	private int indexOf(Pilot pilot) {
-		int index = -1;
-		for(int i=0; i < numPilots; i++) {
-			if(pilot.equals(pilots[i]))
-				return i;
-		}
-		
-		return index;
-	}
-
-	private void expandArray() {
-		Pilot[] newArray = new Pilot[pilots.length*2];
-		System.arraycopy(pilots, 0, newArray, 0, numPilots);
-		pilots = newArray;
+		return (unassignedPilots.contains(pilot) || 
+				assignedPilots.contains(pilot));
 	}
 	
 	public static void main(String[] args) {

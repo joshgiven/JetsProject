@@ -170,6 +170,7 @@ public class JetsUI {
 				break;
 			}
 			else if(choice.equalsIgnoreCase("N")) {
+				crew.unassignPilot(pilot, jet);
 				System.out.println("New jet discarded.");
 				break;
 			}
