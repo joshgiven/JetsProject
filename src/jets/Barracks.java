@@ -86,13 +86,25 @@ public class Barracks {
 		tmpList.addAll(unassignedPilots);
 		return tmpList.toArray(new Pilot[0]);
 	}
+
+	public List<Pilot> getPilotsList() {
+		return new ArrayList<>(Arrays.asList(getAllPilots()));
+	}
 	
 	public Pilot[] getAssignedPilots() {
 		return assignedPilots.toArray(new Pilot[0]);
 	}
 
+	public List<Pilot> getAssignedPilotsList() {
+		return new ArrayList<>(assignedPilots);
+	}
+
 	public Pilot[] getUnassignedPilots() {
 		return unassignedPilots.toArray(new Pilot[0]);
+	}
+
+	public List<Pilot> getUnassignedPilotsList() {
+		return new ArrayList<>(unassignedPilots);
 	}
 
 	public boolean containsPilot(Pilot pilot) {

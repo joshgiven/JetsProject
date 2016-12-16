@@ -1,6 +1,6 @@
 package jets;
 
-import java.util.Scanner;
+import java.util.*;
 
 public class JetsUI {
 	private Hangar fleet;
@@ -106,15 +106,15 @@ public class JetsUI {
 	}
 
 	private void displayFastestJet() {
-		Jet[] allJets = fleet.getJets();
+		List<Jet> allJets = fleet.getJetsList();
 
 		System.out.println();
-		if(allJets == null || allJets.length == 0) {
+		if(allJets == null || allJets.size() == 0) {
 			System.out.println("(No jets in fleet)");
 			return;
 		}
 		
-		Jet fastestJet = allJets[0];
+		Jet fastestJet = allJets.get(0);
 
 		for(Jet j : allJets) {
 			if(j.getSpeed() > fastestJet.getSpeed())
@@ -127,15 +127,15 @@ public class JetsUI {
 	}
 
 	private void displayLongestRange() {
-		Jet[] allJets = fleet.getJets();
+		List<Jet> allJets = fleet.getJetsList();
 
 		System.out.println();
-		if(allJets == null || allJets.length == 0) {
+		if(allJets == null || allJets.size() == 0) {
 			System.out.println("(No jets in fleet)");
 			return;
 		}
 		
-		Jet rangiestJet = allJets[0];
+		Jet rangiestJet = allJets.get(0);
 
 		for(Jet j : allJets) {
 			if(j.getRange() > rangiestJet.getRange())
@@ -180,14 +180,14 @@ public class JetsUI {
 	
 	private void displayPilots() {
 		System.out.println("\nPilot Roster: ");
-		Pilot[] roster = crew.getAllPilots();
-		if(roster == null || roster.length == 0) {
+		List<Pilot> roster = crew.getPilotsList();
+		if(roster == null || roster.size() == 0) {
 			System.out.println("(No pilots on roster)\n");
 			return;
 		}
 		
-		roster = crew.getAssignedPilots();
-		if(roster != null && roster.length > 0) {
+		roster = crew.getAssignedPilotsList();
+		if(roster != null && roster.size() > 0) {
 			System.out.println("  - w/ assigned jets:");
 			for(Pilot p : roster) {
 				System.out.println("     * " + p);
@@ -195,8 +195,8 @@ public class JetsUI {
 			System.out.println();
 		}
 		
-		roster = crew.getUnassignedPilots();
-		if(roster != null && roster.length > 0) {
+		roster = crew.getUnassignedPilotsList();
+		if(roster != null && roster.size() > 0) {
 			System.out.println("  - w/o assigned jets:");
 			for(Pilot p : roster) {
 				System.out.println("     * " + p);

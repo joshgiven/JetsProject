@@ -25,4 +25,8 @@ public class Hangar {
 	public Jet[] getJets() {
 		return jets.toArray(new Jet[0]);
 	}
+
+	public List<Jet> getJetsList() {
+		return new ArrayList<>(jets);
+	}
 }
