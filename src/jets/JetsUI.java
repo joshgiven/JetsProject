@@ -90,13 +90,23 @@ public class JetsUI {
 				break;
 			case QUIT:
 			default:
-				System.out.println("\nGoodbye.");
 				keepRunning = false;
 				break;
 			}
 		} while(keepRunning);
+		
+		tearDown();
+		System.out.println("\nGoodbye.");
 	}
 	
+	private void setUp() {
+		
+	}
+
+	private void tearDown() {
+		
+	}
+
 	private void displayFleet() {
 		System.out.println("\nCurrent Fleet:");
 		for(Jet j : fleet.getJets()) {
